@@ -1,4 +1,4 @@
-from caesar_cipher import CaesarCipher
+from src.caesar_cipher import CaesarCipher
 
 class TestCaesarCipher:
 
