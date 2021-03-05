@@ -5,7 +5,6 @@ class CaesarCipher:
     """ A class used for encryption and decryption,
     using Caesar Cipher  """
 
-
     def __init__(self, shift : int = 3):
         self.shift = shift
         self.alphabet = ascii_uppercase
