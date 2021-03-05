@@ -1,12 +1,12 @@
 import requests
 from enchant.checker import SpellChecker
 
-RANDOM_WORD_URL = "https://random-words-api.vercel.app/word"
+RANDOM_WORD_URL = "https://random-word-api.herokuapp.com/word?number=1"
 RANDOM_QUOTE_URL = "https://api.quotable.io/random"
 
 def get_random_word():
     response = requests.get(RANDOM_WORD_URL)
-    return response.json()[0]['word']
+    return response.json()[0]
 
 def get_random_quote():
     response = requests.get(RANDOM_QUOTE_URL)
