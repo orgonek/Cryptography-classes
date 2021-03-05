@@ -1,4 +1,4 @@
-from utils import get_random_word, get_random_quote
+from utils import get_random_word, get_random_quote, count_errors
 from caesar_cipher import CaesarCipher
 import random
 
@@ -51,6 +51,20 @@ class CaesarCracker:
             else:
                 print(f'You missed! Try again')
 
-cipher = CaesarCracker()
+    def automatic_cracking(self, encrypted_text = 'default'):
+        if encrypted_text == 'default':
+            encrypted_text = self.generate_data()[1]
 
-cipher.manual_cracking_user()
+        result = ''
+
+        for key in range(self.alphabeth_length):
+            self.cipher.shift = key
+            if count_errors(self.cipher.decrypt(encrypted_text)) == 0:
+                result = (key, self.cipher.decrypt(encrypted_text))
+                break
+        if result:
+            print(f'Cracked cipher with key {key}.\nPlaintext value: {self.cipher.decrypt(encrypted_text)}')
+        else:
+            print('No matching results, probably dictionary problems')
+
+        return result != ''
