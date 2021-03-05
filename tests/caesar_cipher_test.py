@@ -1,6 +1,7 @@
 from src.caesar_cipher import CaesarCipher
 
 class TestCaesarCipher:
+    """ Class containing tests for caesar cipher """
 
     def test_instance(self):
         cipher = CaesarCipher()

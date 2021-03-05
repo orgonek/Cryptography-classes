@@ -1,6 +1,7 @@
 from src.vigenere_cipher import VigenereCipher
 
-class TestCaesarCipher:
+class TestVigenereCipher:
+    """ Class containing tests for vigenere cipher """
 
     def test_instance(self):
         cipher = VigenereCipher()

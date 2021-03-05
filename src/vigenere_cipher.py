@@ -38,7 +38,7 @@ class VigenereCipher:
                 for i, letter in enumerate(encrypted_text))
         )
 
-    def generate_repeated_key(self, string, key):
+    def generate_repeated_key(self, string : str, key : str) -> str:
         """ Converts key to text length """
         return key if len(string) == len(key) else ''.join(key[i % len(key)]
             for i in range(len(string))
