@@ -12,10 +12,26 @@ Additionally, in the case of Caesar cipher, it is possible to crack ciphered tex
 ## Installation
 
 1. Clone this repository
-```
-git clone https://github.com/orgonek/Cryptography-classes.git
+```console
+$ git clone https://github.com/orgonek/Cryptography-classes.git
 ```
 2. Install required packages
+```console
+$ pip install -r requirements.txt 
 ```
-pip install -r requirements.txt 
+
+## Usage
+To run tests
+```console
+$ pytest ciphers
 ```
+To run scripts
+```console
+$ cd ciphers/src
+$ python caesar_cli.py 
+$ python vigenere_cli.py 
+$ python caesar_cracker_cli.py 
+```
+
+
+
