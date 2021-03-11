@@ -7,26 +7,25 @@ class HashAll:
         pass
 
     def perform_hashing(self, text : str) -> dict:
-        """ Perfoms hashing using available functions and calculates the execution time for each algorithm """
+        """ Performs hashing using available functions and calculates the execution time for each algorithm """
         
         results = {}
 
         for algorithm in sorted(hashlib.algorithms_available):
             obj = hashlib.new(algorithm)
+            
+            start = timeit.default_timer()
+
             obj.update(text.encode('utf-8'))
 
             results[algorithm] = {}
             
-            start = timeit.default_timer()
-
-            if 'shake' in algorithm:
-                results[algorithm]['hexdigest'] = obj.hexdigest(64)
-            else:
-                results[algorithm]['hexdigest'] = obj.hexdigest()
+            results[algorithm]['hexdigest'] = obj.hexdigest(64) if 'shake' in algorithm else obj.hexdigest()
             
             stop = timeit.default_timer()
 
             results[algorithm]['time'] = (stop - start)
+            
 
         return results
 
