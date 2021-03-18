@@ -1,6 +1,7 @@
 from models import Account
 import sqlite3
 
+
 class DatabaseHandler:
     """ Manages database operations """
     
@@ -10,11 +11,11 @@ class DatabaseHandler:
         self.cursor = self.connection.cursor()
 
     def _dict_factory(self, cursor, row):
+        """ Changes form of DB output"""
         d = {}
         for idx, col in enumerate(cursor.description):
             d[col[0]] = row[idx]
         return d
-
 
     def __del__(self):
         self.connection.close()
@@ -47,6 +48,7 @@ class DatabaseHandler:
         return user_inserted
 
     def get_user_data(self, name : str):
+        """ Extracts required data from database (password, salt) """
         data = None
         if not self.check_name_availability(name):
             self.cursor.execute("SELECT password, salt from users where user = ?", (name,))

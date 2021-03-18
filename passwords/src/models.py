@@ -1,6 +1,7 @@
 import os
 from utils import hash_password
 
+
 class Account:
     """ Contains the essential fields of an account """
 
