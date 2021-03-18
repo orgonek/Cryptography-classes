@@ -1,10 +1,10 @@
-from database_handler import DatabaseHandler
-from models import Account
-from utils import hash_password
+from src.database_handler import DatabaseHandler
+from src.models import Account
+from src.utils import hash_password
 
 
 class ApplicationService:
-    """ Class responsible for  """
+    """ Class responsible for management of app """
     def __init__(self) -> None:
         self.db = DatabaseHandler()
         self.db.create_users_table()

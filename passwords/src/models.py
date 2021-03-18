@@ -1,5 +1,5 @@
 import os
-from utils import hash_password
+from src.utils import hash_password
 
 
 class Account:
@@ -23,7 +23,7 @@ class Account:
         return self._salt
 
     @salt.setter
-    def salt(self, value = os.urandom(32)):
+    def salt(self, value=os.urandom(32)):
         self._salt = value
 
     @property
