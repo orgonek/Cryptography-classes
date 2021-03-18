@@ -1,4 +1,4 @@
-from src.models import Account
+from models import Account
 import sqlite3
 
 

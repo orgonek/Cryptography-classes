@@ -1,6 +1,6 @@
-from src.database_handler import DatabaseHandler
-from src.models import Account
-from src.utils import hash_password
+from database_handler import DatabaseHandler
+from models import Account
+from utils import hash_password
 
 
 class ApplicationService:

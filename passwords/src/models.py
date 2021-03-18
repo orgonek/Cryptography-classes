@@ -1,5 +1,5 @@
 import os
-from src.utils import hash_password
+from utils import hash_password
 
 
 class Account:
