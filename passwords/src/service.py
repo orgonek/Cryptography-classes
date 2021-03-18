@@ -1,5 +1,6 @@
 from database_handler import DatabaseHandler
 from models import Account
+from utils import hash_password
 
 
 class ApplicationService:
@@ -14,12 +15,8 @@ class ApplicationService:
 
     def authenticate_user(self, name, password) -> bool:
         status = False
-        
-        details = self.db.get_user_data(name)
-        account = Account(name, password)
+        data = self.db.get_user_data(name)
+        if data and hash_password(password, bytes.fromhex(data['salt'])) == data['password']:
+            status = True
 
-
-        if account.hash_password(password, bytes.fromhex(details['salt'])) == details['password']:
-            print("prawda")
-        else:
-            print("nie prawda")
+        return status
