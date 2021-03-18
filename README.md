@@ -5,3 +5,5 @@
 | --- | --- | --- | 
 | Caesar and Vigenère ciphers | [ciphers](https://github.com/orgonek/Cryptography-classes/tree/main/ciphers)  | ***Completed*** |
 | Hashlib python library | [hashing](https://github.com/orgonek/Cryptography-classes/tree/main/hashing)  | ***Completed*** |
+| SQLite password storage | [passwords](https://github.com/orgonek/Cryptography-classes/tree/main/passwords)  | ***Completed*** |
+
