@@ -1,3 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
+    <div class="card-deck">
+        <div class="card">
+            <img class="card-img-top" src="{{ url_for('static', path='/img/comp.jpg')  }}" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">Symmetric</h5>
+                <p class="card-text">Symmetric tab allows you to generate a random key, set the key, encrypt and decrypt the message</p>
+                <a href="#" class="btn btn-primary">Encrypt your first message!</a>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="{{ url_for('static', path='/img/digital.jpg') }}" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">Asymmetric</h5>
+                <p class="card-text">Asymmetric tab allows you to generate and set key. There is also a way to sign and verify message or verify, sign</p>
+                <a href="#" class="btn btn-primary">Try asymmetric encryption</a>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="{{ url_for('static', path='/img/servers.jpg')}}" alt="Card image cap">
+            <div class="card-body text-center">
+                <h5 class="card-title">Documentation</h5>
+                <p class="card-text">The documentation page contains the information you need to use the application correctly</p>
+
+                <a href="#" class="btn btn-primary">Check documentation</a>
+            </div>
+        </div>
 {% endblock content %}
