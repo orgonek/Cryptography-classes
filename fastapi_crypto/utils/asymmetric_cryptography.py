@@ -1,7 +1,9 @@
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding, utils
+from cryptography.exceptions import InvalidSignature
+import logging
 
-from fastapi.openapi.models import Encoding
+logging.basicConfig(filename='asymmetric.log', level=logging.DEBUG)
 
 
 class Asymmetric:
@@ -73,12 +75,18 @@ class Asymmetric:
             private_key: Private key specified by user (hex)
 
         """
-        self.keys['public'] = public_key
-        self.keys['private'] = private_key
-        self.public_key = serialization.load_pem_public_key(bytes.fromhex(self.keys['public']))
-        self.private_key = serialization.load_pem_private_key(bytes.fromhex(self.keys['private']), password=None)
+        status = True
+        try:
+            self.keys['public'] = public_key
+            self.keys['private'] = private_key
+            self.public_key = serialization.load_pem_public_key(bytes.fromhex(self.keys['public']))
+            self.private_key = serialization.load_pem_private_key(bytes.fromhex(self.keys['private']), password=None)
+        except ValueError as v:
+            self.__generate_random_keys()
+            status = False
+            logging.info('value error')
 
-        return self.keys
+        return status
 
     def sign_message(self, message: str):
         """
@@ -89,14 +97,20 @@ class Asymmetric:
         Returns:
             signature: hex based string, which allows user to verify message
         """
-        return self.private_key.sign(
-            message.encode('UTF-8'),
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        ).hex()
+        signature = ''
+        try:
+            signature = self.private_key.sign(
+                message.encode('UTF-8'),
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            ).hex()
+        except ValueError:
+            signature = message
+
+        return signature
 
     def verify_message(self, message, signature):
         """
@@ -106,15 +120,23 @@ class Asymmetric:
             signature: Signed signature
 
         """
-        return self.public_key.verify(
-            bytes.fromhex(signature),
-            message.encode('UTF-8'),
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()),
-                salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256()
-        )
+        status = True
+
+        try:
+            verification = self.public_key.verify(
+                bytes.fromhex(signature),
+                message.encode('UTF-8'),
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                hashes.SHA256()
+            )
+        except (InvalidSignature, ValueError):
+            status = False
+            logging.info('Broken signature!')
+
+        return status
 
     def encode_message(self, message):
         """
@@ -125,11 +147,18 @@ class Asymmetric:
         Returns: Encrypted message
 
         """
-        return self.public_key.encrypt(message.encode('UTF-8'), padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        )).hex()
+        encrypted_message = ''
+
+        try:
+            encrypted_message = self.public_key.encrypt(message.encode('UTF-8'), padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )).hex()
+        except ValueError:
+            encrypted_message = message
+
+        return encrypted_message
 
     def decode_message(self, message):
         """
@@ -140,8 +169,15 @@ class Asymmetric:
         Returns: Decrypted message
 
         """
-        return self.private_key.decrypt(bytes.fromhex(message), padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        ))
+        decrypted_message = ""
+
+        try:
+            decrypted_message = self.private_key.decrypt(bytes.fromhex(message), padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            ))
+        except ValueError as e:
+            decrypted_message = message
+
+        return decrypted_message

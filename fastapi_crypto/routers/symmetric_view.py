@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Form, HTTPException, Request
 from utils.symmetric_cryptography import Symmetric
-from models import KeyInfo, MessageInfo
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
@@ -25,7 +24,7 @@ async def set_key(key: str = Form(...)):
     return {"Actual key value": key}
 
 
-@router.get('/key/set')
+@router.get('/key/set', include_in_schema=False)
 async def set_key(request: Request):
     return templates.TemplateResponse('form_key.html', context={'request': request})
 
@@ -39,9 +38,9 @@ async def encode_message(message: str = Form(...)):
     return {"Encrypted message": encrypted_message}
 
 
-@router.get('/encode')
+@router.get('/encode', include_in_schema=False)
 async def encode_message(request: Request):
-    return templates.TemplateResponse('form_symmetric.html', context={'request': request, 'path': '/api/symmetric/encode'})
+    return templates.TemplateResponse('form_data.html', context={'request': request, 'path': '/api/symmetric/encode'})
 
 
 @router.post('/decode')
@@ -53,7 +52,7 @@ async def decode_message(message: str = Form(...)):
     return {"Decrypted message": decrypted_message}
 
 
-@router.get('/decode')
+@router.get('/decode', include_in_schema=False)
 async def decode_message(request: Request):
-    return templates.TemplateResponse('form_symmetric.html', context={'request': request, 'path': '/api/symmetric/decode/'})
+    return templates.TemplateResponse('form_data.html', context={'request': request, 'path': '/api/symmetric/decode/'})
 
