@@ -1,4 +1,7 @@
 from cryptography.fernet import Fernet, InvalidToken
+import logging
+
+logging.basicConfig(filename='symmetric.log', level=logging.DEBUG)
 
 
 class Symmetric:
@@ -7,7 +10,8 @@ class Symmetric:
     """
 
     def __init__(self):
-        self.key = ""
+        self.key = ''
+        self.create_key()
 
     def create_key(self):
         """
@@ -52,6 +56,7 @@ class Symmetric:
         except ValueError as e:
             encrypted_message = message
 
+        logging.debug(self.key)
         return encrypted_message
 
     def decode_message(self, message: str):
