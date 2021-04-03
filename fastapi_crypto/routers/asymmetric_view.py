@@ -31,22 +31,22 @@ async def set_keys(items: KeysInfo):
 
 @router.post('/verify')
 async def verify_message(data: MessageSignature):
-    algorithm.verify_message(data.value, data.signature)
+    algorithm.verify_message(data.content, data.signature)
 
 
 @router.post('/sign')
 async def sign_message(data: MessageInfo):
-    data.value = algorithm.sign_message(data.value)
+    data.content = algorithm.sign_message(data.content)
     return data
 
 
 @router.post('/encode')
 async def encode_message(message: MessageInfo):
-    message.value = algorithm.encode_message(message.value)
+    message.content = algorithm.encode_message(message.content)
     return message
 
 
 @router.post('/decode')
 async def decode_message(message: MessageInfo):
-    message.value = algorithm.decode_message(message.value)
+    message.content = algorithm.decode_message(message.content)
     return message

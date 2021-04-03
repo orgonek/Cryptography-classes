@@ -1,4 +1,4 @@
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 
 
 class Symmetric:
@@ -24,7 +24,16 @@ class Symmetric:
                 value: Key specified by user (hex)
 
         """
-        self.key = bytes.fromhex(value)
+        status: bool = True
+
+        try:
+            value = bytes.fromhex(value)
+            f = Fernet(value)
+            self.key = value
+        except ValueError as e:
+            status = False
+
+        return status
 
     def encode_message(self, message: str):
         """
@@ -36,8 +45,14 @@ class Symmetric:
         Returns:
             Encrypted message
         """
-        f = Fernet(self.key)
-        return f.encrypt(message.encode('UTF-8')).hex()
+        encrypted_message = ''
+        try:
+            f = Fernet(self.key)
+            encrypted_message = f.encrypt(message.encode('UTF-8')).hex()
+        except ValueError as e:
+            encrypted_message = message
+
+        return encrypted_message
 
     def decode_message(self, message: str):
         """
@@ -49,5 +64,12 @@ class Symmetric:
             Returns:
                 Decrypted message
         """
-        f = Fernet(self.key)
-        return f.decrypt(bytes.fromhex(message))
+        decrypted_message = "Incorrect value"
+
+        try:
+            f = Fernet(self.key)
+            decrypted_message = f.decrypt(bytes.fromhex(message))
+        except (ValueError, InvalidToken):
+            decrypted_message = message
+
+        return decrypted_message
