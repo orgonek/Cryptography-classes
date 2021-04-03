@@ -3,8 +3,6 @@ from fastapi.templating import Jinja2Templates
 
 from utils.asymmetric_cryptography import Asymmetric
 
-from models import KeysInfo, MessageSignature, MessageInfo
-
 router = APIRouter(
     prefix='/api/asymmetric',
     tags=['asymmetric'],
