@@ -1,24 +1,13 @@
 from fastapi import APIRouter
 from utils.asymmetric_cryptography import Asymmetric
-from pydantic.main import BaseModel
-from typing import Optional
+
+from models import KeysInfo, MessageSignature, MessageInfo
 
 router = APIRouter(
     prefix='/api/asymmetric',
     tags=['asymmetric'],
     responses={404: {'description': 'Not found'}},
 )
-
-
-class KeysInfo(BaseModel):
-    public_key: str
-    private_key: str
-    description: Optional[str]
-
-
-class MessageInfo(BaseModel):
-    value: str
-    description: Optional[str]
 
 
 algorithm = Asymmetric()
@@ -41,14 +30,14 @@ async def set_keys(items: KeysInfo):
 
 
 @router.post('/verify')
-async def verify_message():
-    pass
+async def verify_message(data: MessageSignature):
+    algorithm.verify_message(data.value, data.signature)
 
 
 @router.post('/sign')
-async def sign_message(message: MessageInfo):
-    message.value = algorithm.sign_message(message.value)
-    return message
+async def sign_message(data: MessageInfo):
+    data.value = algorithm.sign_message(data.value)
+    return data
 
 
 @router.post('/encode')

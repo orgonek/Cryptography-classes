@@ -1,10 +1,13 @@
 from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.asymmetric import rsa, padding, utils
 
 from fastapi.openapi.models import Encoding
 
 
 class Asymmetric:
+    """
+    Stores asymmetric functions
+    """
 
     def __init__(self):
         self.keys = {}
@@ -13,6 +16,11 @@ class Asymmetric:
         self.__generate_random_keys()
 
     def __generate_random_keys(self, mode: str = 'RSA'):
+        """
+        Generates and assigns public and private key, depending on the option selected (RSA/ SSH)
+        Args:
+            mode: name of format style
+        """
         options = {'encoding': serialization.Encoding.PEM,
                    'format': serialization.PrivateFormat.TraditionalOpenSSL,
                    'encryption_algorithm': serialization.NoEncryption(),
@@ -44,14 +52,27 @@ class Asymmetric:
         ).hex()
 
     def create_keys(self):
+        """
+        Creates public and private keys, using PEM encoding
+        """
         self.__generate_random_keys()
         return self.keys
 
     def create_ssh_keys(self):
+        """
+        Creates public and private keys, using SSH encoding
+        """
         self.__generate_random_keys('SSH')
         return self.keys
 
     def set_keys(self, public_key, private_key):
+        """
+        Allows user to set public and private key
+        Args:
+            public_key: Public key specified by user (hex)
+            private_key: Private key specified by user (hex)
+
+        """
         self.keys['public'] = public_key
         self.keys['private'] = private_key
         self.public_key = serialization.load_pem_public_key(bytes.fromhex(self.keys['public']))
@@ -60,7 +81,14 @@ class Asymmetric:
         return self.keys
 
     def sign_message(self, message: str):
+        """
+        Signs message given by user
+        Args:
+            message: Plain text, entered by user
 
+        Returns:
+            signature: hex based string, which allows user to verify message
+        """
         return self.private_key.sign(
             message.encode('UTF-8'),
             padding.PSS(
@@ -70,10 +98,33 @@ class Asymmetric:
             hashes.SHA256()
         ).hex()
 
-    def verify_message(self):
-        pass
+    def verify_message(self, message, signature):
+        """
+        Checks if private key associated with public key was used to sign specific message
+        Args:
+            message: Message to check
+            signature: Signed signature
+
+        """
+        return self.public_key.verify(
+            bytes.fromhex(signature),
+            message.encode('UTF-8'),
+            padding.PSS(
+                mgf=padding.MGF1(hashes.SHA256()),
+                salt_length=padding.PSS.MAX_LENGTH
+            ),
+            hashes.SHA256()
+        )
 
     def encode_message(self, message):
+        """
+        Encrypts message using public key
+        Args:
+            message: Plain text entered by user
+
+        Returns: Encrypted message
+
+        """
         return self.public_key.encrypt(message.encode('UTF-8'), padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
@@ -81,10 +132,16 @@ class Asymmetric:
         )).hex()
 
     def decode_message(self, message):
+        """
+        Decrypts message using private key
+        Args:
+            message: Hex value entered by user
+
+        Returns: Decrypted message
+
+        """
         return self.private_key.decrypt(bytes.fromhex(message), padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),
             label=None
         ))
-
-

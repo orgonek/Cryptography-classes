@@ -1,7 +1,6 @@
 from fastapi import APIRouter
-from pydantic.main import BaseModel
 from utils.symmetric_cryptography import Symmetric
-from typing import Optional
+from models import KeyInfo, MessageInfo
 
 router = APIRouter(
     prefix='/api/symmetric',
@@ -10,16 +9,6 @@ router = APIRouter(
 )
 
 algorithm = Symmetric()
-
-
-class KeyInfo(BaseModel):
-    value: str
-    description: Optional[str] = None
-
-
-class MessageInfo(BaseModel):
-    value: str
-    description: Optional[str] = None
 
 
 @router.get('/key')
