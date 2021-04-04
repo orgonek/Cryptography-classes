@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='fastAPI_crypto',
-    version='1.0',
+    version='0.1',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
@@ -14,6 +14,8 @@ setup(
         'uvicorn~=0.12.3',
         'aiofiles~=0.6.0',
         'Jinja2~=2.11.3',
-        'python-multipart~=0.0.5'
+        'python-multipart~=0.0.5',
+        'pytest~=6.2.3',
+        'requests~=2.25.1',
     ],
 )
