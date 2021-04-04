@@ -45,6 +45,7 @@ class TestAsymmetric:
         message = 'hello'
         assert a.encode_message(message) != message
 
-
-
-
+    def test_decode_message(self):
+        a = Asymmetric()
+        message = a.encode_message('hello')
+        assert 'hello' == a.decode_message(message)
