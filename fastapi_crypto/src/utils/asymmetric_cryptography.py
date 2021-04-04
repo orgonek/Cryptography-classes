@@ -176,7 +176,8 @@ class Asymmetric:
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
                 algorithm=hashes.SHA256(),
                 label=None
-            ))
+            )).decode('utf-8')
+
         except ValueError as e:
             decrypted_message = message
 

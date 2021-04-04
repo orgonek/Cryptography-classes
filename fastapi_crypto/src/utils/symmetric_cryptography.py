@@ -69,7 +69,7 @@ class Symmetric:
 
         try:
             f = Fernet(self.key)
-            decrypted_message = f.decrypt(bytes.fromhex(message))
+            decrypted_message = f.decrypt(bytes.fromhex(message)).decode('utf-8')
         except (ValueError, InvalidToken):
             decrypted_message = message
 
