@@ -10,6 +10,7 @@ class CustomCipher:
         self.alphabet = ascii_letters
         self.STARTING_POS = 35
         self.sub_alphabet = self._generate_sub_alphabet()
+        self.rev_alphabet = self._generate_reversed_sub_alphabet()
 
     def _generate_sub_alphabet(self):
         sub_alphabet = {}
@@ -20,8 +21,15 @@ class CustomCipher:
 
         return sub_alphabet
 
-    def encrypt(self, text):
-        with open(text) as file:
+    def _generate_reversed_sub_alphabet(self):
+        return {
+            value: letter
+            for letter, values in self.sub_alphabet.items()
+            for value in values
+        }
+
+    def encrypt(self, filename):
+        with open(filename) as file:
             data = file.read()
             data = re.sub("[^a-zA-Z]+", "", data)
 
@@ -33,11 +41,26 @@ class CustomCipher:
             else:
                 encrypted_text += letter
 
-        encrypted_text_save = [encrypted_text[i:i + 90] for i in range(0, len(encrypted_text), 90)]
-        print(encrypted_text_save)
+        encrypted_text_format= [encrypted_text[i:i + 90] for i in range(0, len(encrypted_text), 90)]
 
-        with open('test.txt', 'w+') as file:
-            for line in encrypted_text_save:
+        with open(f'encrypted_{filename}', 'w+') as file:
+            for line in encrypted_text_format:
                 file.write(f'{line}\n')
 
         return encrypted_text
+
+    def decrypt(self, filename):
+        decrypted_text = ''
+        with open(filename) as file:
+            text = file.read()
+            text = re.sub("[^0-9]+", "", text)
+
+        text_formatted = [text[i: i + 3] for i in range(0, len(text), 3)]
+        for sign in text_formatted:
+            decrypted_text += self.rev_alphabet[int(sign)]
+
+        decrypted_text_format = [decrypted_text[i:i + 90] for i in range(0, len(decrypted_text), 90)]
+
+        with open(f'decrypted_{filename}', 'w+') as file:
+            for line in decrypted_text_format:
+                file.write(f'{line}\n')
