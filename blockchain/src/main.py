@@ -1,9 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from block import Blockchain
 from uuid import uuid4
 from fastapi.responses import JSONResponse
+from models import Transaction
 
-app = FastAPI()
+app = FastAPI(docs_url='/')
 
 blockchain = Blockchain()
 
@@ -13,7 +14,7 @@ BLOCK_REWARD = 10
 
 
 @app.get('/api/status')
-def get_status():
+def get_blockchain_status():
     if blockchain:
         return {'Status': 'Blockchain working correctly'}
 
@@ -21,7 +22,7 @@ def get_status():
 
 
 @app.get('/api/mine')
-def mine():
+def mine_block():
     last_block = blockchain.last_block
     proof = blockchain.proof_of_work(last_block)
     blockchain.new_transaction(
@@ -45,7 +46,7 @@ def mine():
 
 
 @app.get('/api/chain')
-def chain():
+def chain_detail():
     context = {
         'Length of chain': len(blockchain.chain),
         'Chain content': blockchain.chain,
@@ -53,3 +54,12 @@ def chain():
 
     return JSONResponse(content=context)
 
+
+@app.post('/api/transactions/new')
+async def new_transaction(transaction: Transaction):
+    transaction = blockchain.new_transaction(transaction.sender, transaction.recipient, transaction.amount)
+    context = {
+        'message': f'Transaction will be added to block {transaction}'
+    }
+
+    return JSONResponse(content=context)
