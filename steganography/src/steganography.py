@@ -10,8 +10,11 @@ class Steganography:
         """
             Encoding the message inside image
         """        
-        
-        img = Image.open(src, 'r')
+        try:
+            img = Image.open(src, 'r')
+        except(FileNotFoundError):
+            print('File not found')
+
         width, height = img.size
 
         array = np.array(list(img.getdata()))
@@ -40,7 +43,9 @@ class Steganography:
 
             array = array.reshape(height, width, n)
             encoded_image = Image.fromarray(array.astype('uint8'), img.mode)
-            encoded_image.save(dest)
+            
+            encoded_image.save(f'{dest}.png')
+
 
             print('Image encoded')
 
@@ -79,8 +84,8 @@ class Steganography:
                 message += chr(int(hidden_bits[i], 2))
 
         if DELIMITER in message:
-            print("Hidden message", message[:-5])
+            return message[:-5]
         else:
-            print("No hidden message")
+            return "No hidden message"
 
 
