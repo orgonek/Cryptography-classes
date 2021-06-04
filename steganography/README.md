@@ -33,5 +33,8 @@ $ python main.py [option]
 
 *decode-message* - allows user to decode hidden message
 
+### Source
+[Based on medium.com](https://medium.com/swlh/lsb-image-steganography-using-python-2bbbee2c69a2)
+
 
 
