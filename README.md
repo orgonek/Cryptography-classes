@@ -9,6 +9,7 @@
 | API for Symmetric and Asymmetric encryption | [fastapi_crypto](https://github.com/orgonek/Cryptography-classes/tree/main/fastapi_crypto)  | ***Completed*** |
 | Custom Cipher | [custom cipher](https://github.com/orgonek/Cryptography-classes/tree/main/custom_cipher)  | ***Completed*** |
 | Simple blockchain | [blockchain](https://github.com/orgonek/Cryptography-classes/tree/main/blockchain)  | ***Completed*** |
+| Steganography | [steganography CLI](https://github.com/orgonek/Cryptography-classes/tree/main/steganography) | ***Completed***|
 
 
 
