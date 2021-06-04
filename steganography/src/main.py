@@ -29,24 +29,16 @@ def encode_message(path, message):
 @click.option('--path', prompt=True, help='Enter a path, where your image is located')
 def decode_message(path):
     message = Steganography.decode(path)
-    print(message)
 
     choice = input('Did you use cipher to encrypt text ? (y/n)')
     if choice.lower() == 'y':
         cipher = input('Which cipher was used to encrypt message (c/v)')
         if cipher.lower() == 'c':
             message = c.decrypt(message)
-            print(message)
         elif cipher.lower() =='v':
             message = v.decrypt(message)
-            print(message)
 
     click.echo(f'Decrypted message:{ message }')
-
-        
-
-
-
 
 
 if __name__ == '__main__':

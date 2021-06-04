@@ -14,6 +14,7 @@ class Steganography:
             img = Image.open(src, 'r')
         except(FileNotFoundError):
             print('File not found')
+            return 'Error'
 
         width, height = img.size
 
@@ -31,7 +32,7 @@ class Steganography:
         message_len = len(binary_message)
 
         if message_len > total_pixels:
-            print('Error')
+            return 'Error'
         
         else:
             index = 0
@@ -47,7 +48,7 @@ class Steganography:
             encoded_image.save(f'{dest}.png')
 
 
-            print('Image encoded')
+            return 'Image encoded'
 
         
 
