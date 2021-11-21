@@ -9,7 +9,7 @@ setup(
     install_requires=[
         'click~=7.1.2',
         'cryptography~=3.4.7',
-        'fastapi~=0.63.0',
+        'fastapi>=0.65.2',
         'pydantic~=1.8.1',
         'uvicorn~=0.12.3',
         'aiofiles~=0.6.0',
